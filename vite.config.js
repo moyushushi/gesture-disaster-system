@@ -7,6 +7,7 @@ export default defineConfig({
   build:{
     outDir: 'docs',
     emptyOutDir: true,
+    assetsDir: 'static',
   },
   base:'/gesture-disaster-system/'
 })
