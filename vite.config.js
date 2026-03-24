@@ -8,5 +8,5 @@ export default defineConfig({
     outDir: 'docs',
     emptyOutDir: true,
   },
-  base:'/gesture-disaster-system.git/'
+  base:'/gesture-disaster-system/'
 })
