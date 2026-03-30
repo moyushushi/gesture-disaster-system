@@ -9,6 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supermap/vue-iclient3d-webgl": "^1.0.9",
+    "@tensorflow-models/hand-pose-detection": "^2.0.1",
+    "@tensorflow-models/handpose": "^0.1.0",
+    "@tensorflow/tfjs-converter": "^4.22.0",
+    "@tensorflow/tfjs-core": "^4.22.0",
+    "element-plus": "^2.13.6",
+    "pinia": "^3.0.4",
+    "three": "^0.183.2",
     "vue": "^3.5.30"
   },
   "devDependencies": {

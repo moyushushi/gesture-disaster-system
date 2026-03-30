@@ -8,6 +8,11 @@ export default defineConfig({
     outDir: 'docs',
     emptyOutDir: true,
     assetsDir: 'static',
+  },resolve: {
+    alias: {
+      'three': 'three/build/three.module.js'
+    }
   },
-  base:'/gesture-disaster-system/'
+  assetsInclude: ['**/*.cur'],
+  base:'/moyushushi.git.io/gesture-disaster-system/'
 })
