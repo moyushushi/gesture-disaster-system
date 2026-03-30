@@ -14,5 +14,5 @@ export default defineConfig({
     }
   },
   assetsInclude: ['**/*.cur'],
-  base:'/moyushushi.git.io/gesture-disaster-system/'
+  base:'/gesture-disaster-system/'
 })
