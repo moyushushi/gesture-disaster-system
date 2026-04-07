@@ -2,16 +2,20 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>灾害推演手势标绘系统</title>
-    <!-- 引入 Cesium 样式 -->
-    <link href="/Cesium/Widgets/widgets.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>手势灾害系统</title>
+    <style>
+        html, body, #app {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body>
 <div id="app"></div>
-<!-- 引入 Cesium 核心库（必须在 Vue 应用之前加载） -->
-<script type="text/javascript" src="/Cesium/Cesium.js"></script>
 <script type="module" src="/src/main.js"></script>
 </body>
 </html>
