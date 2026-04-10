@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mediapipe/hands": "^0.4.1675469240",
     "@supermap/iclient3d-webgl": "^11.1.4",
     "@tensorflow-models/hand-pose-detection": "^2.0.1",
     "@tensorflow-models/handpose": "^0.1.0",

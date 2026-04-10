@@ -8,7 +8,7 @@ export default defineConfig({
     CESIUM_BASE_URL: JSON.stringify('/node_modules/cesium/Build/Cesium/')
   },
   optimizeDeps: {
-    include: ['cesium', '@supermap/vue-iclient3d-webgl']
+    include: ['cesium', '@supermap/vue-iclient3d-webgl',]
   },
   build:{
     outDir: 'docs',

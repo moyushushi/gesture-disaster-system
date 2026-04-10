@@ -1,11 +1,13 @@
 <template>
   <div id="app">
-    <GestureScene />
+    //GestureScene />
+    <GestureCapture />
   </div>
 </template>
 
 <script setup>
-import GestureScene from './components/GestureScene.vue'
+//import GestureScene from './components/GestureScene.vue'
+import GestureCapture from './components/GestureCapture.vue'
 </script>
 
 <style>
