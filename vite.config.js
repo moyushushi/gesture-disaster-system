@@ -1,20 +1,25 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import cesium from 'vite-plugin-cesium'
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [vue(),cesium()],
-  define: {
-    CESIUM_BASE_URL: JSON.stringify('/node_modules/cesium/Build/Cesium/')
+import path from 'path'
+
+export default defineConfig(({ mode }) => {
+   console.log(`当前构建模式: ${mode}`)
+   return {
+  plugins: [vue()],
+     resolve: {
+       alias: {
+         '@': path.resolve(__dirname, './src')
+       }
+     },
+  server: {
+    port: 5173,
+    open: true
   },
-  optimizeDeps: {
-    include: ['cesium', '@supermap/vue-iclient3d-webgl',]
-  },
-  build:{
+  build: {
     outDir: 'docs',
     emptyOutDir: true,
     assetsDir: 'static',
   },
-  assetsInclude: ['**/*.cur'],
-  base:'/gesture-disaster-system/'
+  base: '/gesture-disaster-system/'
+}
 })

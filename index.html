@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-    <title>手势灾害系统</title>
+    <title>手势灾害系统 - 基于SuperMap GIS</title>
+    <!-- 引入 SuperMap iClient3D 的 Cesium 样式 -->
+    <link rel="stylesheet" href="/node_modules/@supermap/iclient3d-webgl/Build/Cesium/Widgets/widgets.css" />
     <style>
         html, body, #app {
             margin: 0;
@@ -16,6 +18,8 @@
 </head>
 <body>
 <div id="app"></div>
+<!-- 引入 SuperMap 扩展的 Cesium -->
+<script src="/node_modules/@supermap/iclient3d-webgl/Cesium/Cesium.js"></script>
 <script type="module" src="/src/main.js"></script>
 </body>
 </html>
