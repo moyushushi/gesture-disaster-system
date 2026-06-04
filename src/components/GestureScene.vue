@@ -18,10 +18,9 @@ let viewer = null
 const getViewer = () => viewer
 defineExpose({ getViewer })
 
-// 替换 addTestBuildings 函数
+// 测试建筑（临安区中心附近）
 function addTestBuildings() {
   if (!viewer) return
-  // 临安区中心附近坐标
   const centerLon = 119.72
   const centerLat = 30.23
   const radius = 0.008   // 约 800 米
@@ -47,6 +46,28 @@ function addTestBuildings() {
     })
   }
 }
+
+// 加载道路数据（GeoJSON），并通过全局函数传递给 GestureCapture
+async function loadRoads() {
+  try {
+    // 请将临安区道路的 GeoJSON 文件放在 public/data/linan_roads.geojson
+    const response = await fetch('/data/linan_roads.geojson')
+    if (response.ok) {
+      const geojson = await response.json()
+      if (geojson.features && geojson.features.length) {
+        if (window.loadRoads) {
+          window.loadRoads(geojson.features)
+          console.log(`道路数据加载成功，共 ${geojson.features.length} 条道路`)
+        }
+      }
+    } else {
+      console.warn('道路数据文件不存在，道路淹没统计将不可用')
+    }
+  } catch (e) {
+    console.warn('道路数据加载失败', e)
+  }
+}
+
 onMounted(() => {
   const container = cesiumContainer.value
   if (!container) {
@@ -61,7 +82,7 @@ onMounted(() => {
   }
 
   try {
-    // 1. 创建 Viewer
+    // 创建 Viewer
     viewer = new Cesium.Viewer(container, {
       animation: false,
       baseLayerPicker: false,
@@ -76,13 +97,12 @@ onMounted(() => {
       navigationHelpButton: false,
       shadows: true,
       terrainProvider: new Cesium.EllipsoidTerrainProvider(),
-      // backgroundColor: new Cesium.Color(0.1, 0.2, 0.4, 1.0)  // 取消注释可恢复星空
     })
 
     // 移除默认 Bing 底图
     viewer.imageryLayers.removeAll()
 
-    // ===== 2. 仅加载高德影像底图（无标注）=====
+    // 加载高德影像底图（无标注）
     const gaodeImagery = new Cesium.UrlTemplateImageryProvider({
       url: 'https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
       subdomains: ['1', '2', '3', '4'],
@@ -90,9 +110,8 @@ onMounted(() => {
       credit: '高德地图'
     })
     viewer.imageryLayers.addImageryProvider(gaodeImagery)
-    // 不添加任何标注层
 
-    // ===== 3. 相机视角（临安区）=====
+    // 相机视角（临安区）
     viewer.camera.setView({
       destination: Cesium.Cartesian3.fromDegrees(119.72, 30.23, 500),
       orientation: {
@@ -103,7 +122,7 @@ onMounted(() => {
     })
     viewer.scene.globe.enableLighting = true
 
-    // 强制调整 canvas 尺寸
+    // 强制调整 canvas 尺寸（解决初始尺寸问题）
     requestAnimationFrame(() => {
       setTimeout(() => {
         viewer.resize()
@@ -122,7 +141,7 @@ onMounted(() => {
     }
     window.addEventListener('resize', handleResize)
 
-    // ===== 4. 地形服务 =====
+    // 地形服务（已生效）
     if (config.isSuperMap() && config.getTerrainUrl()) {
       try {
         const terrainUrl = config.getTerrainUrl()
@@ -152,6 +171,10 @@ onMounted(() => {
     loading.value = false
     console.log('三维场景初始化成功')
 
+    // 加载道路数据（用于洪水模拟中的道路淹没统计）
+    loadRoads()
+
+    // 组件卸载时清理
     onBeforeUnmount(() => {
       window.removeEventListener('resize', handleResize)
       if (viewer) {
