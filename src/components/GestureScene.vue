@@ -1,7 +1,7 @@
 <template>
   <div ref="cesiumContainer" class="scene-container">
-    <div v-if="loadError" class="error-overlay">❌ {{ loadError }}</div>
-    <div v-if="loading" class="loading-overlay">🌍 加载三维场景中...</div>
+    <div v-if="loadError" class="error-overlay"> {{ loadError }}</div>
+    <div v-if="loading" class="loading-overlay"> 加载三维场景中...</div>
   </div>
 </template>
 
@@ -18,12 +18,11 @@ let viewer = null
 const getViewer = () => viewer
 defineExpose({ getViewer })
 
-// 测试建筑（临安区中心附近）
 function addTestBuildings() {
   if (!viewer) return
   const centerLon = 119.72
   const centerLat = 30.23
-  const radius = 0.008   // 约 800 米
+  const radius = 0.008
   const heights = [20, 35, 50, 28, 42, 33, 55, 18, 27, 44, 38, 22]
   for (let i = 0; i < 12; i++) {
     const angle = (i / 12) * Math.PI * 2
@@ -47,11 +46,9 @@ function addTestBuildings() {
   }
 }
 
-// 加载道路数据（GeoJSON），并通过全局函数传递给 GestureCapture
 async function loadRoads() {
   try {
-    // 请将临安区道路的 GeoJSON 文件放在 public/data/linan_roads.geojson
-    const response = await fetch('/data/linan_roads.geojson')
+    const response = await fetch('src/data/result_clip.json')
     if (response.ok) {
       const geojson = await response.json()
       if (geojson.features && geojson.features.length) {
@@ -80,9 +77,8 @@ onMounted(() => {
     loading.value = false
     return
   }
-
+// 创建 Viewer,设置 preserveDrawingBuffer: true 以截图
   try {
-    // 创建 Viewer
     viewer = new Cesium.Viewer(container, {
       animation: false,
       baseLayerPicker: false,
@@ -97,23 +93,45 @@ onMounted(() => {
       navigationHelpButton: false,
       shadows: true,
       terrainProvider: new Cesium.EllipsoidTerrainProvider(),
+      contextOptions: {
+        webgl: {
+          preserveDrawingBuffer: true,  // 关键：允许截图
+          alpha: true
+        }
+      }
     })
 
-    // 移除默认 Bing 底图
+    // 移除默认底图
     viewer.imageryLayers.removeAll()
 
-    // 加载高德影像底图（无标注）
+    // 加载高德影像底图
     const gaodeImagery = new Cesium.UrlTemplateImageryProvider({
       url: 'https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}',
       subdomains: ['1', '2', '3', '4'],
       maximumLevel: 18,
       credit: '高德地图'
     })
-    viewer.imageryLayers.addImageryProvider(gaodeImagery)
+    viewer.imageryLayers.addImageryProvider(gaodeImagery);
 
-    // 相机视角（临安区）
+    if (config.getSuperMapBaseMapUrl()) {
+      try {
+        const localImagery = new Cesium.SuperMapImageryProvider({
+          url: config.getSuperMapBaseMapUrl()
+        });
+        const localLayer = viewer.imageryLayers.addImageryProvider(localImagery);
+        localLayer.brightness = 1.8;   // 亮度提升
+        localLayer.contrast = 1.3;     // 对比度提升
+        localLayer.gamma = 0.9;
+        // localLayer.alpha = 0.8;
+        console.log('本地影像服务已叠加至高德底图之上');
+      } catch (error) {
+        console.error('本地影像服务加载失败', error);
+      }
+    }
+
+    // 相机视角
     viewer.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(119.72, 30.23, 500),
+      destination: Cesium.Cartesian3.fromDegrees(119.72, 30.23, 1000),
       orientation: {
         heading: Cesium.Math.toRadians(0),
         pitch: Cesium.Math.toRadians(-30),
@@ -122,7 +140,6 @@ onMounted(() => {
     })
     viewer.scene.globe.enableLighting = true
 
-    // 强制调整 canvas 尺寸（解决初始尺寸问题）
     requestAnimationFrame(() => {
       setTimeout(() => {
         viewer.resize()
@@ -141,28 +158,25 @@ onMounted(() => {
     }
     window.addEventListener('resize', handleResize)
 
-    // 地形服务（已生效）
+    // 地形服务
     if (config.isSuperMap() && config.getTerrainUrl()) {
       try {
         const terrainUrl = config.getTerrainUrl()
         console.log('地形服务地址:', terrainUrl)
-
         const terrainProvider = new Cesium.CesiumTerrainProvider({
           url: terrainUrl,
           isSct: true,
           requestVertexNormals: true,
           requestWaterMask: false,
         })
-
         terrainProvider.errorEvent.addEventListener((err) => {
           console.warn('地形服务加载失败，使用默认地形:', err)
           viewer.terrainProvider = new Cesium.EllipsoidTerrainProvider()
         })
-
         viewer.terrainProvider = terrainProvider
-        console.log('✅ 地形服务加载中...')
+        console.log(' 地形服务加载中...')
       } catch (err) {
-        console.warn('❌ 地形初始化失败，使用默认地形:', err)
+        console.warn(' 地形初始化失败，使用默认地形:', err)
         viewer.terrainProvider = new Cesium.EllipsoidTerrainProvider()
       }
     }
@@ -171,18 +185,17 @@ onMounted(() => {
     loading.value = false
     console.log('三维场景初始化成功')
 
-    // 加载道路数据（用于洪水模拟中的道路淹没统计）
     loadRoads()
+    window.viewer = viewer
 
-    // 组件卸载时清理
     onBeforeUnmount(() => {
       window.removeEventListener('resize', handleResize)
       if (viewer) {
         viewer.destroy()
         viewer = null
+        window.viewer = null
       }
     })
-
   } catch (err) {
     console.error(err)
     loadError.value = `初始化失败: ${err.message}`

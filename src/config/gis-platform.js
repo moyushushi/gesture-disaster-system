@@ -3,12 +3,12 @@ const platform = import.meta.env.VITE_GIS_PLATFORM || 'supermap'
 
 const urls = {
     supermap: {
-        // 底图服务（请替换为你自己发布的地图服务地址）
-        baseMap: 'http://localhost:8090/iserver/services/ditu/rest/realspace/datas/hz_s2a@ditu',
+        // 底图服务（请替换为发布的地图服务地址）
+        baseMap: 'http://localhost:8090/iserver/services/dt/rest/realspace/datas/result_ImageCombine@dt',
         terrain: 'http://localhost:8090/iserver/services/gesture_terrain/rest/realspace/datas/ASTGTM_N30E119X@DataSource',
         flood: 'http://localhost:8090/iserver/services/spatialanalyst3d-sampling/restjsr/spatialanalyst3d/datasets/Buildings/flood',
         network: 'http://localhost:8090/iserver/services/transportationAnalyst-daolu/rest/networkanalyst/daolu_Network@daolu',
-        // 新增：空间分析服务根地址（用于栅格统计等）
+        // 空间分析服务根地址（栅格统计）
         spatialAnalysis: 'http://localhost:8090/iserver/services/spatialAnalysis-WorkSpace1/restjsr/spatialanalyst'
     },
     geoscene: {
@@ -33,7 +33,6 @@ export const config = {
     getNetworkUrl() {
         return urls[platform]?.network || null
     },
-    // 新增：获取空间分析服务根地址
     getSpatialAnalysisUrl() {
         return urls[platform]?.spatialAnalysis || null
     },
