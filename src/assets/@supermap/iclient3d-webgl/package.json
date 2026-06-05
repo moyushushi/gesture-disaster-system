@@ -1,0 +1,39 @@
+{
+  "_from": "@supermap/iclient3d-webgl",
+  "_id": "@supermap/iclient3d-webgl@11.1.4",
+  "_inBundle": false,
+  "_integrity": "sha512-2F7KW0jeR4x5f5EemC+0soKT7dBv5e4X/Y/a2ZGkOXl1bGwWBqjxTgkfeIz9TuBfIXd9bXnicQVnuJ5WyVWylg==",
+  "_location": "/@supermap/iclient3d-webgl",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@supermap/iclient3d-webgl",
+    "name": "@supermap/iclient3d-webgl",
+    "escapedName": "@supermap%2ficlient3d-webgl",
+    "scope": "@supermap",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@supermap/iclient3d-webgl/-/iclient3d-webgl-10.2.2.tgz",
+  "_shasum": "a57c1fb0336d715b94c676284dde25dfbfad4968",
+  "_spec": "@supermap/iclient3d-webgl",
+  "_where": "D:\\package\\npm_plugin",
+  "author": "",
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "@supermap/iclient3d-webgl（SuperMap iClient 3D for Cesium） 一款在服务式 GIS 架构体系中， 无任何插件，跨浏览器的客户端产品。它基于Cesium开源框架，面向 HTML 5 的三维应用开发，快速构建内容丰富、响应迅速、体验流畅的三维真空间应用。",
+  "keywords": [],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "@supermap/iclient3d-webgl",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "11.1.4"
+}
