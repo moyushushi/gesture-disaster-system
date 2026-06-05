@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => {
     open: true
   },
   build: {
-    outDir: 'docs',
+    outDir: 'dist',
     emptyOutDir: true,
     assetsDir: 'static',
   },
