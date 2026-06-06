@@ -30,6 +30,7 @@
     "@vitejs/plugin-vue": "^6.0.5",
     "vite": "^8.0.1",
     "vite-plugin-cesium": "^1.2.23",
-    "vite-plugin-cesium-next": "^2.0.5"
+    "vite-plugin-cesium-next": "^2.0.5",
+    "vite-plugin-static-copy": "^4.1.0"
   }
 }
